@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, ContactShadows } from '@react-three/drei'
 import * as THREE from 'three'
 import { useStore } from '../store/useStore'
 import { CerebroProcedural } from './CerebroProcedural'
@@ -71,15 +71,23 @@ function Cerebro({ usarGLTF }: Props) {
 
 export function Escena({ usarGLTF }: Props) {
   return (
-    <Canvas camera={{ position: [0, 3, 28], fov: 45 }} dpr={[1, 2]}>
+    <Canvas
+      camera={{ position: [0, 3, 28], fov: 45 }}
+      dpr={[1, 2]}
+      gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
+    >
       <color attach="background" args={['#0d1117']} />
-      <hemisphereLight args={['#ffffff', '#202830', 0.8]} />
-      <ambientLight intensity={0.35} />
-      <directionalLight position={[10, 12, 8]} intensity={1.1} castShadow={false} />
-      <directionalLight position={[-8, -4, -10]} intensity={0.4} />
+
+      {/* Iluminación de estudio: clave cálida, relleno hemisférico, contraluz frío y relleno inferior. */}
+      <hemisphereLight args={['#fff3ee', '#161922', 0.55]} />
+      <ambientLight intensity={0.22} />
+      <directionalLight position={[9, 13, 9]} intensity={1.35} color="#fff4ec" />
+      <directionalLight position={[-11, 3, -7]} intensity={0.55} color="#9fb4ff" />
+      <directionalLight position={[0, -7, 5]} intensity={0.25} />
 
       <Suspense fallback={null}>
         <Cerebro usarGLTF={usarGLTF} />
+        <ContactShadows position={[0, -7.6, 0]} opacity={0.45} scale={42} blur={2.6} far={22} color="#000000" />
       </Suspense>
 
       <OrbitControls

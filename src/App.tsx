@@ -12,8 +12,10 @@ export default function App() {
 
   const cortezaVisible = useStore((s) => s.cortezaVisible)
   const cortezaTransparente = useStore((s) => s.cortezaTransparente)
+  const coloreado = useStore((s) => s.coloreado)
   const toggleCorteza = useStore((s) => s.toggleCorteza)
   const toggleTransparencia = useStore((s) => s.toggleTransparencia)
+  const toggleColoreado = useStore((s) => s.toggleColoreado)
 
   useEffect(() => {
     let activo = true
@@ -40,6 +42,10 @@ export default function App() {
 
         <div className="controles">
           <AcercaDe />
+          <label className="check">
+            <input type="checkbox" checked={coloreado} onChange={toggleColoreado} />
+            Vista coloreada (mapa por regiones)
+          </label>
           <label className="check">
             <input type="checkbox" checked={cortezaVisible} onChange={toggleCorteza} />
             Mostrar corteza (lóbulos)

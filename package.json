@@ -1,5 +1,5 @@
 {
-  "name": "cerebro-3d",
+  "name": "atlas-cerebro-3d",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -15,6 +15,7 @@
     "@react-three/postprocessing": "^2.16.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "simplex-noise": "^4.0.3",
     "three": "^0.169.0",
     "zustand": "^4.5.5"
   },

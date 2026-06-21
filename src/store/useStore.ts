@@ -12,11 +12,14 @@ interface Estado {
   cortezaVisible: boolean
   /** Corteza semitransparente para entrever el interior. */
   cortezaTransparente: boolean
+  /** Vista coloreada: cada región con su color distintivo (mapa didáctico). Si está desactivada, el cerebro tiene color natural y la región solo se colorea al señalarla. */
+  coloreado: boolean
 
   setHovered: (id: string | null) => void
   select: (id: string | null) => void
   toggleCorteza: () => void
   toggleTransparencia: () => void
+  toggleColoreado: () => void
 }
 
 export const useStore = create<Estado>((set, get) => ({
@@ -24,12 +27,14 @@ export const useStore = create<Estado>((set, get) => ({
   selectedId: null,
   focusReq: null,
   cortezaVisible: true,
-  cortezaTransparente: true,
+  cortezaTransparente: false,
+  coloreado: false,
 
   setHovered: (id) => set({ hoveredId: id }),
 
   toggleCorteza: () => set((s) => ({ cortezaVisible: !s.cortezaVisible })),
   toggleTransparencia: () => set((s) => ({ cortezaTransparente: !s.cortezaTransparente })),
+  toggleColoreado: () => set((s) => ({ coloreado: !s.coloreado })),
 
   select: (id) => {
     if (id === null) {

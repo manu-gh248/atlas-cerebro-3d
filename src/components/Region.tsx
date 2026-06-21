@@ -39,6 +39,10 @@ interface Props {
   esCorteza: boolean
 }
 
+/** Color natural del tejido cerebral (rosado-grisáceo), usado cuando no está activa la vista coloreada. */
+export const COLOR_CEREBRO = '#c79b91'
+const COLOR_CEREBRO_PROFUNDO = '#b9a6ac' // estructuras profundas, algo más pálidas
+
 /** Una malla concreta de una región, con resaltado reactivo al hover/selección. */
 export function MallaRegion({ region, geometry, position, rotation, esCorteza }: Props) {
   const eventos = useEventosRegion(region.id)
@@ -48,24 +52,34 @@ export function MallaRegion({ region, geometry, position, rotation, esCorteza }:
   const hovered = useStore((s) => s.hoveredId === region.id)
   const selected = useStore((s) => s.selectedId === region.id)
   const cortezaTransparente = useStore((s) => s.cortezaTransparente)
+  const coloreado = useStore((s) => s.coloreado)
 
-  const color = useMemo(() => new THREE.Color(region.color), [region.color])
+  const colorRegion = useMemo(() => new THREE.Color(region.color), [region.color])
+  const colorNatural = useMemo(
+    () => new THREE.Color(esCorteza ? COLOR_CEREBRO : COLOR_CEREBRO_PROFUNDO),
+    [esCorteza],
+  )
 
   // Opacidad base: la corteza puede ser semitransparente para ver el interior.
   const opacidadBase = esCorteza && cortezaTransparente ? 0.32 : 1
 
-  // Animación suave de resaltado (emisivo + leve escala al seleccionar).
+  // Animación suave de color (natural ↔ color de región), resaltado y escala.
   useFrame((_, dt) => {
     const m = matRef.current
     if (m) {
-      const objetivoEmisivo = selected ? 0.9 : hovered ? 0.55 : 0
+      const resaltada = hovered || selected
+      const objetivoColor = coloreado || resaltada ? colorRegion : colorNatural
+      const a = 1 - Math.pow(0.0015, dt)
+      m.color.lerp(objetivoColor, a)
+
+      const objetivoEmisivo = selected ? 0.85 : hovered ? 0.45 : 0
       m.emissiveIntensity = THREE.MathUtils.damp(m.emissiveIntensity, objetivoEmisivo, 8, dt)
-      const objetivoOpacidad = hovered || selected ? Math.max(opacidadBase, 0.85) : opacidadBase
+      const objetivoOpacidad = resaltada ? Math.max(opacidadBase, 0.85) : opacidadBase
       m.opacity = THREE.MathUtils.damp(m.opacity, objetivoOpacidad, 8, dt)
     }
     const mesh = meshRef.current
     if (mesh) {
-      const objetivoEscala = selected ? 1.06 : 1
+      const objetivoEscala = selected ? 1.04 : 1
       const s = THREE.MathUtils.damp(mesh.scale.x, objetivoEscala, 10, dt)
       mesh.scale.setScalar(s)
     }
@@ -82,11 +96,11 @@ export function MallaRegion({ region, geometry, position, rotation, esCorteza }:
     >
       <meshStandardMaterial
         ref={matRef}
-        color={color}
-        emissive={color}
+        color={colorNatural}
+        emissive={colorRegion}
         emissiveIntensity={0}
-        roughness={0.55}
-        metalness={0.05}
+        roughness={0.75}
+        metalness={0.02}
         transparent
         opacity={opacidadBase}
         depthWrite={!(esCorteza && cortezaTransparente)}
