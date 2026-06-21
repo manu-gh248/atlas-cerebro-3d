@@ -1,0 +1,327 @@
+:root {
+  --bg: #0d1117;
+  --panel: #161b22;
+  --panel-2: #1c2330;
+  --borde: #2a3140;
+  --texto: #e6edf3;
+  --texto-tenue: #9aa7b5;
+  --acento: #4f8ff7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--texto);
+  overflow: hidden;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  height: 100%;
+}
+
+/* ----------------------------------------------------- Panel de etiquetas */
+.panel-etiquetas {
+  background: var(--panel);
+  border-right: 1px solid var(--borde);
+  padding: 18px 16px;
+  overflow-y: auto;
+}
+
+.titulo-app {
+  font-size: 19px;
+  margin: 0 0 4px;
+}
+
+.subtitulo-app {
+  font-size: 12.5px;
+  color: var(--texto-tenue);
+  margin: 0 0 14px;
+}
+
+.buscador {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--borde);
+  background: var(--panel-2);
+  color: var(--texto);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.buscador:focus {
+  outline: none;
+  border-color: var(--acento);
+}
+
+.grupo {
+  margin-bottom: 18px;
+}
+.grupo-titulo {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--texto-tenue);
+  margin: 0 0 8px;
+}
+.grupo ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.etiqueta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: var(--panel-2);
+  color: var(--texto);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, transform 0.08s;
+}
+.etiqueta:hover,
+.etiqueta.resaltada {
+  background: #232c3a;
+  border-color: var(--borde);
+}
+.etiqueta.activa {
+  background: #243149;
+  border-color: var(--acento);
+}
+.etiqueta-punto {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+/* ------------------------------------------------------------------ Visor */
+.visor {
+  position: relative;
+  height: 100%;
+}
+.visor canvas {
+  display: block;
+}
+
+.controles {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  background: rgba(22, 27, 34, 0.82);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  user-select: none;
+}
+.check input {
+  accent-color: var(--acento);
+}
+.badge-modelo {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--texto-tenue);
+}
+.badge-modelo.ok {
+  color: #5fd16a;
+}
+
+.boton-acerca {
+  background: var(--panel-2);
+  border: 1px solid var(--borde);
+  color: var(--texto);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.boton-acerca:hover {
+  border-color: var(--acento);
+}
+
+.ayuda {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--texto-tenue);
+  background: rgba(22, 27, 34, 0.7);
+  padding: 6px 14px;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- Tooltip */
+.tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  background: rgba(13, 17, 23, 0.95);
+  border: 1px solid var(--acento);
+  border-radius: 7px;
+  padding: 5px 10px;
+  font-size: 13.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.tooltip-punto {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+/* ------------------------------------------------------------- Panel info */
+.panel-info {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  width: 320px;
+  max-width: calc(100% - 28px);
+  background: rgba(22, 27, 34, 0.94);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--borde);
+  border-top: 3px solid var(--acento);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.panel-info.vacio {
+  color: var(--texto-tenue);
+  font-size: 13px;
+  border-top-color: var(--borde);
+}
+.panel-info h3 {
+  margin: 0 0 2px;
+  font-size: 18px;
+}
+.panel-info .cientifico {
+  margin: 0 0 8px;
+  font-style: italic;
+  color: var(--texto-tenue);
+  font-size: 13px;
+}
+.panel-info .grupo-tag {
+  display: inline-block;
+  margin: 0 0 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--texto-tenue);
+  background: var(--panel-2);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.panel-info .funcion {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cerrar {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--texto-tenue);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.cerrar:hover {
+  color: var(--texto);
+}
+
+/* ----------------------------------------------------------------- Modal */
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+.modal {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 24px 26px;
+  max-width: 540px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.modal h2 {
+  margin: 0 0 12px;
+}
+.modal h3 {
+  margin: 18px 0 6px;
+  font-size: 15px;
+  color: var(--acento);
+}
+.modal p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--texto);
+}
+.modal code {
+  background: var(--panel-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.modal .nota {
+  color: var(--texto-tenue);
+  font-size: 12.5px;
+}
+
+/* ------------------------------------------------------------ Responsive */
+@media (max-width: 720px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 38% 62%;
+  }
+  .panel-info {
+    width: calc(100% - 28px);
+  }
+}
